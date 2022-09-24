@@ -1,0 +1,52 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+  <mat-drawer-container class="flex-auto h-full">
+    <!-- Drawer -->
+    <mat-drawer
+      class="w-72 dark:bg-gray-900"
+      [mode]="drawerMode"
+      [opened]="drawerOpened"
+      #drawer
+    >
+      <ng-container *ngIf="episodes$ | async as episodes; else loading">
+        <div
+          class="relative flex flex-auto flex-col w-full min-w-0 h-full lg:min-w-90 lg:max-w-90 border-r z-10"
+        >
+          <!-- Header -->
+          <app-episode-header
+            class="relative flex flex-0 items-center justify-between h-16 px-4 bg-fuchsia-700"
+          >
+          </app-episode-header>
+
+          <!-- Episode list -->
+          <div class="overflow-y-auto" #episodeList>
+            <div *ngFor="let episode of episodes">
+              <div
+                class="flex px-8 py-5 cursor-pointer"
+                [ngClass]="{
+                  'hover:bg-gray-100 dark:hover:bg-hover':
+                    !selectedEpisodeId || selectedEpisodeId !== episode.id,
+                  'bg-primary-50 dark:bg-hover':
+                    selectedEpisodeId && selectedEpisodeId === episode.id
+                }"
+                (click)="showEpisode(episode.id)"
+              >
+                {{ episode.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #loading>
+        <mat-spinner></mat-spinner>
+      </ng-template>
+    </mat-drawer>
+
+    <!-- Drawer content -->
+    <mat-drawer-content class="flex flex-col overflow-hidden">
+      <!-- Main -->
+      <div class="flex flex-auto overflow-hidden">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>
