@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, HostBinding, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Episode } from 'src/app/core';
@@ -9,7 +9,7 @@ import { EpisodeService } from '../../services';
   templateUrl: './episode-list.component.html',
   styleUrls: ['./episode-list.component.css'],
 })
-export class EpisodeListComponent implements OnInit {
+export class EpisodeListComponent implements OnInit, AfterContentInit, OnDestroy {
   @HostBinding('class.routed-component')
   routed_component: boolean = true;
 
@@ -41,6 +41,10 @@ export class EpisodeListComponent implements OnInit {
     })
   }
 
+  ngAfterContentInit() {
+    this.onResize();
+  }
+
   /**
    * On destroy
    */
@@ -65,6 +69,16 @@ export class EpisodeListComponent implements OnInit {
     // Close the drawer on 'over' mode
     if (this.drawerMode === 'over') {
       this.drawer.close();
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    if (window.innerWidth <= 768) {
+      this.drawerMode = 'over';
+    } else if (window.innerWidth > 768 && this.drawerMode === 'over') {
+      this.drawerMode = 'side';
+      this.drawer.open();
     }
   }
 }

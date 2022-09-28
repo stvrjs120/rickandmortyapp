@@ -86,7 +86,6 @@ export class EpisodeService {
   getCharacters = (characterIds: number[]): Observable<any> => {
       this._charactersLoading.next(true);
       const ids = characterIds.join(',');
-      console.log(ids);
 
       return this._httpClient
         .get<Character[]>(`${this.URL}/character/${ids}`)

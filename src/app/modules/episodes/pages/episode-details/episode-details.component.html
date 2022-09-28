@@ -1,3 +1,4 @@
+<ng-container *ngIf="episode$ | async as episode">
   <div class="w-full">
     <!-- Episode header -->
     <div class="flex items-center">
@@ -11,11 +12,25 @@
       </button>
 
       <!-- Episode title -->
-      <ng-container *ngIf="episode$ | async as episode">
+      
         <div class="ml-2 lg:ml-0 text-3xl font-bold tracking-tight leading-none">
           {{episode.name}} - {{episode.episode}}
         </div>
-      </ng-container>
+    </div>
+
+    <div class="mt-8">
+      <div class="w-full">
+        <div class="text-xl">Air date</div>
+        <div class="text-secondary mb-2">{{episode.air_date}}</div>
+      </div>
+      <div class="w-full">
+        <div class="text-xl">Description</div>
+        <div class="text-secondary">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla tincidunt non purus at interdum. Ut tellus arcu, tincidunt et quam sit amet, tempus scelerisque orci. Praesent vestibulum maximus consectetur. Phasellus a felis eget nisi mollis semper eu at mauris. Praesent iaculis magna lacus, ac posuere felis cursus sed. Nunc sit amet ipsum quis metus facilisis pretium. Quisque euismod tortor massa, eu tempor velit accumsan sit amet. Mauris sed libero nisi.</p>
+
+          <p>Morbi tincidunt tempor felis. Pellentesque a mauris nec ante euismod sollicitudin eu vitae purus. Mauris sodales, nisl dapibus tincidunt venenatis, lectus lacus egestas diam, interdum posuere dolor sem et turpis.</p>
+          </div>
+      </div>
     </div>
 
     <div class="mt-8">
@@ -25,14 +40,23 @@
       <ng-template #loaded>
         <ng-container *ngIf="characters$ | async as characters;">
           <div class="flex flex-col w-full p-8 pt-6 pb-4 bg-neutral-700 rounded-xl">
-            <div class="text-xl font-semibold leading-tight mb-6">
-              Characters
+            <div class="text-xl font-semibold leading-tight">
+              Characters in episode ({{characters.length}})
             </div>
-            <div class="" *ngFor="let character of characters">
-              {{character.name}}
+            <div class="grid 2xl:grid-cols-7 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2">
+              <div class="mt-6" *ngFor="let character of characters">
+                <div class="flex items-center">
+                  <img src="{{character.image}}" class="w-14 h-14 mr-4 rounded-full">
+                  <div class="flex flex-col min-w-0">
+                    <div class="font-medium leading-none">{{character.name}}</div>
+                    <div class="text-md leading-none text-secondary mt-1">{{character.species}}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </ng-container>
       </ng-template>
     </div>
   </div>
+</ng-container>
