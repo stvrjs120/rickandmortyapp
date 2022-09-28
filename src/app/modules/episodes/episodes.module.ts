@@ -7,11 +7,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { routes } from './episodes.routing';
 import {
-  EpisodeCardComponent,
   EpisodeDetailsComponent,
   EpisodeEmptyComponent,
   EpisodeHeaderComponent,
-  EpisodeListComponent,
+  EpisodeListComponent
 } from './pages';
 
 @NgModule({
@@ -27,7 +26,6 @@ import {
     EpisodeDetailsComponent,
     EpisodeEmptyComponent,
     EpisodeListComponent,
-    EpisodeCardComponent,
     EpisodeHeaderComponent,
   ],
   providers: [],
