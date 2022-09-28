@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Pagination } from 'src/app/core/models/pagination.model';
 import { environment } from 'src/environments/environment';
-import { Episode, EpisodeResponse } from '../../../core/models';
+import { Character, Episode, EpisodeResponse } from '../../../core/models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,16 +11,26 @@ import { Episode, EpisodeResponse } from '../../../core/models';
 export class EpisodeService {
   // Private
   private readonly URL = environment.api;
-  private _episodes: BehaviorSubject<Episode[] | null> = new BehaviorSubject<
-    Episode[] | null
-  >(null);
-  private _episodesLoading: BehaviorSubject<boolean> = new BehaviorSubject(
-    false
-  );
-  private _pagination: BehaviorSubject<Pagination | null> =
-    new BehaviorSubject<Pagination | null>(null);
+  private _episodes: BehaviorSubject<Episode[] | null> = new BehaviorSubject<Episode[] | null>(null);
+  private _characters: BehaviorSubject<Character[] | null> = new BehaviorSubject<Character[] | null>(null);
+  private _episodesLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _charactersLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _episode: BehaviorSubject<Episode | null> = new BehaviorSubject<Episode | null>(null);
+  private _pagination: BehaviorSubject<Pagination | null> = new BehaviorSubject<Pagination | null>(null);
 
   constructor(private _httpClient: HttpClient) {}
+
+  set episode(episode: Episode) {
+    this._episode.next(episode);
+  }
+
+  get episode$(): Observable<Episode | null> {
+    return this._episode.asObservable();
+  }
+
+  get characters$(): Observable<Character[] | null> {
+    return this._characters.asObservable();
+  }
 
   get episodes$(): Observable<Episode[] | null> {
     return this._episodes.asObservable();
@@ -28,6 +38,10 @@ export class EpisodeService {
 
   get episodesLoading$(): Observable<boolean> {
     return this._episodesLoading.asObservable();
+  }
+
+  get charactersLoading$(): Observable<boolean> {
+    return this._charactersLoading.asObservable();
   }
 
   get pagination$(): Observable<any> {
@@ -68,4 +82,21 @@ export class EpisodeService {
         })
       );
   };
+
+  getCharacters = (characterIds: number[]): Observable<any> => {
+      this._charactersLoading.next(true);
+      const ids = characterIds.join(',');
+      console.log(ids);
+
+      return this._httpClient
+        .get<Character[]>(`${this.URL}/character/${ids}`)
+        .pipe(
+          tap((data: any) => {
+            if (!!!data.error) {
+              this._characters.next(data);
+            }
+            this._charactersLoading.next(false);
+          })
+        )
+  }
 }

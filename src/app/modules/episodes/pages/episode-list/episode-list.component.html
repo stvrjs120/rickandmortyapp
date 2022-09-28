@@ -1,7 +1,7 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
   <mat-drawer-container class="flex-auto h-full">
     <!-- Drawer -->
-    <mat-drawer class="w-72" [mode]="drawerMode" [opened]="drawerOpened" #drawer>
+    <mat-drawer class="w-80" [mode]="drawerMode" [opened]="drawerOpened" #drawer>
       <ng-container *ngIf="episodes$ | async as episodes; else loading">
         <div
           class="relative flex flex-auto flex-col w-full min-w-0 h-full lg:min-w-90 lg:max-w-90 border-r z-10">
@@ -19,21 +19,23 @@
                   'hover:bg-neutral-700': !selectedEpisodeId || selectedEpisodeId !== episode.id,
                   'bg-neutral-800': selectedEpisodeId && selectedEpisodeId === episode.id
                 }"
-                (click)="showEpisode(episode.id)">
+                [routerLink]="[episode.id]"
+                (click)="showEpisode(episode)">
                 <mat-icon
                   [ngClass]="{
                     'text-hint': !selectedEpisodeId || selectedEpisodeId !== episode.id,
                     'text-primary': selectedEpisodeId && selectedEpisodeId === episode.id
                   }"
-                  fontIcon="personal_video"></mat-icon>
+                  fontIcon="ondemand_video"></mat-icon>
                 <div class="ml-3">
                   <div
                     class="font-medium leading-6"
                     [ngClass]="{
                       'text-primary': selectedEpisodeId && selectedEpisodeId === episode.id
                     }">
-                    {{ episode.name }}
+                    {{episode.name}}
                   </div>
+                  <div class="mt-0.5 text-secondary"> {{ episode.episode }} </div>
                 </div>
               </div>
             </div>
@@ -46,9 +48,10 @@
     </mat-drawer>
 
     <!-- Drawer content -->
-    <mat-drawer-content class="flex flex-col overflow-hidden">
+    <mat-drawer-content class="flex flex-col">
+
       <!-- Main -->
-      <div class="flex flex-auto overflow-hidden">
+      <div class="flex-auto px-6 pt-9 pb-12 md:p-8 md:pb-12 lg:p-12">
         <router-outlet></router-outlet>
       </div>
     </mat-drawer-content>

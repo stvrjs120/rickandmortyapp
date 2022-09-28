@@ -1,3 +1,38 @@
-<p>
-  episode-details works!
-</p>
+  <div class="w-full">
+    <!-- Episode header -->
+    <div class="flex items-center">
+
+      <!-- Drawer toggle -->
+      <button
+          class="lg:hidden -ml-2"
+          mat-icon-button
+          (click)="episodeListComponent.drawer.toggle()">
+          <mat-icon fontIcon="menu"></mat-icon>
+      </button>
+
+      <!-- Episode title -->
+      <ng-container *ngIf="episode$ | async as episode">
+        <div class="ml-2 lg:ml-0 text-3xl font-bold tracking-tight leading-none">
+          {{episode.name}} - {{episode.episode}}
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="mt-8">
+      <ng-container *ngIf="loadingCharacters$ | async; else loaded">
+        <mat-progress-bar class="absolute inset-x-0 bottom-0 h-0.5" [mode]="'indeterminate'"></mat-progress-bar>
+      </ng-container>
+      <ng-template #loaded>
+        <ng-container *ngIf="characters$ | async as characters;">
+          <div class="flex flex-col w-full p-8 pt-6 pb-4 bg-neutral-700 rounded-xl">
+            <div class="text-xl font-semibold leading-tight mb-6">
+              Characters
+            </div>
+            <div class="" *ngFor="let character of characters">
+              {{character.name}}
+            </div>
+          </div>
+        </ng-container>
+      </ng-template>
+    </div>
+  </div>
